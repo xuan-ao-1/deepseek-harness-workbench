@@ -1,6 +1,6 @@
-# Release [PLANNED]
+# Release
 
-本文描述发布政策。当前**没有任何已验证的发布产物**。
+本文描述发布政策。**v0.1.1 已发布**（2026-08-15，见 GitHub Releases 与 STATUS.md）。
 
 ## 产物（M1 目标）
 

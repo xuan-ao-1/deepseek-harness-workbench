@@ -1,13 +1,13 @@
 ﻿# Project Status
 
-Last updated: 2026-08-14
-Updated by: opencode（M1 收尾：无边框窗口 + frameless titleBarOverlay）
+Last updated: 2026-08-15
+Updated by: opencode（M1 收尾：无边框窗口完全自绘 + v0.1.1 发布到 GitHub）
 
 ## Current Versions
 
 | 项 | 值 |
 |---|---|
-| Workbench | 0.1.0 |
+| Workbench | 0.1.1 |
 | DeepSeek Harness | **@deepseek-ai/dsh@0.1.0-rc.6**（exact pin） |
 | Electron | 33.4.11 / electron-builder 26.x |
 | Bundled Node（随包分发） | v24.19.0（build/runtime/node/node.exe） |
@@ -24,12 +24,12 @@ Updated by: opencode（M1 收尾：无边框窗口 + frameless titleBarOverlay�
 - [x] Portable 数据隔离（ADR-003）：`PORTABLE_EXECUTABLE_DIR` → `DSH_HOME=<exe>/data/.dsh`；`WORKBENCH_DSH_HOME` 环境变量可覆盖（冒烟用）
 - [x] 冒烟套件 **8 PASS / 0 FAIL / 1 SKIPPED**（arch guard 92 文件、pin、dump-config、web boot+HTTP 200、staging、产物、Portable 干净 DSH_HOME 离线 bootstrap、Portable 数据隔离）
 - [x] 打包产物内使用内置 node（`resolveBundledNode` 优先 resourcesPath），不依赖系统 Node
-- [x] **无边框窗口（Frameless）**：`frame: false` + Windows `titleBarOverlay`（原生最小化/最大化/关闭按钮覆盖层，40px 高）+ `insertCSS` 全局 `-webkit-app-region: drag` 拖拽注入 + `window.workbenchWindow` IPC 控制桥（ADR-011）
-- [x] Bootstrap fallback 页自定义标题栏：40px 深色标题栏 + 自绘 min/max/close 按钮（hover 红色关闭）+ maximize/restore 图标切换
+- [x] **无边框窗口（Frameless）**：`frame: false` + **完全自绘窗口控制条**（`WINDOW_CONTROLS_JS` 注入 32px 全宽拖拽条 + 自绘 3 按钮，对齐 Windows 11 / TraeWork 风格）+ 自适应浅色/深色主题 + `window.workbenchWindow` IPC 控制桥（ADR-011 修订）
+- [x] Bootstrap fallback 页自定义标题栏：32px + 自绘 min/max/close 按钮（hover 红色关闭 `#e81123`）+ maximize/restore 图标切换
 
 ## Partial
 
-- [ ] Electron 窗口人工视觉验证（本机为无头验证路径，smoke marker 证明链路；**无边框/拖拽/overlay 需真实 Windows 桌面人眼验收**）
+- [x] **Electron 窗口人工视觉验证**：真实 Windows 桌面人眼验收通过 —— 按钮默认深灰图标、hover 淡灰背景、关闭 hover 红底白叉、自适应主题均正确
 - [ ] 干净虚拟机验证（无 Node、无 ~/.dsh 的真实首启场景）——本机以"干净 DSH_HOME + Setup 静默装到临时目录"近似覆盖，真 VM 仍待做
 
 ## Broken / Blocked
@@ -38,7 +38,7 @@ Updated by: opencode（M1 收尾：无边框窗口 + frameless titleBarOverlay�
 
 ## Current Architecture
 
-Installer → Electron（单实例，**无边框窗口 + Windows titleBarOverlay**）→ resources/node/node.exe + resources/dsh（hoisted）→ `dsh --profile workbench --port 0`（随机 loopback）→ BrowserWindow 加载官方 Web UI。主进程 `did-finish-load` 后通过 `insertCSS` 注入全局拖拽样式（`body` 可拖拽，交互元素 no-drag）。用户生态：安装版 `~/.dsh`，Portable `<exe>/data/.dsh`。首启缺失 profile 时从 `resources/profile-template/workbench` 离线复制（ADR-010）。
+Installer → Electron（单实例，**无边框窗口 + 完全自绘控制条**）→ resources/node/node.exe + resources/dsh（hoisted）→ `dsh --profile workbench --port 0`（随机 loopback）→ BrowserWindow 加载官方 Web UI。主进程 `did-finish-load` 后通过 `insertCSS` 注入全局拖拽样式（`body` 可拖拽，交互元素 no-drag）。用户生态：安装版 `~/.dsh`，Portable `<exe>/data/.dsh`。首启缺失 profile 时从 `resources/profile-template/workbench` 离线复制（ADR-010）。
 
 ## Current Profile
 
