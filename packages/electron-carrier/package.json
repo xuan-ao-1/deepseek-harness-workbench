@@ -1,0 +1,14 @@
+{
+  "name": "@dsh-workbench/electron-carrier",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Official DSH GUI logical protocol carried over Electron IPC. No new RPC verbs.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3"
+  }
+}

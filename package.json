@@ -1,0 +1,15 @@
+{
+  "name": "deepseek-harness-workbench",
+  "version": "0.1.1",
+  "private": true,
+  "description": "Desktop distribution of the official DeepSeek Harness architecture. Not a fork, not a new harness, not a new plugin framework.",
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "arch:check": "node build/scripts/check-architecture.mjs",
+    "smoke:check": "node build/smoke-tests/smoke.mjs",
+    "package": "node build/scripts/package.mjs"
+  }
+}

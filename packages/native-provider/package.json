@@ -1,0 +1,14 @@
+{
+  "name": "@dsh-workbench/native-provider",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Native OS capabilities exposed as providers on official DSH capability seams.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3"
+  }
+}

@@ -1,0 +1,34 @@
+appId: org.deepseek-harness.workbench
+productName: DeepSeek Harness Workbench
+directories:
+  output: ../../release
+files:
+  - dist/**/*
+  - renderer-bootstrap/**/*
+  - package.json
+  - "!node_modules/**"
+asar: true
+extraResources:
+  - from: ../../build/runtime/node
+    to: node
+  - from: ../../build/runtime/dsh/node_modules
+    to: dsh/node_modules
+  - from: ../../build/runtime/dsh/package.json
+    to: dsh/package.json
+  - from: ../../build/runtime/profile-template
+    to: profile-template
+win:
+  icon: ../../build/installer/icon.png
+  target:
+    - nsis
+    - portable
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: DeepSeek Harness Workbench
+  artifactName: DeepSeek-Harness-Workbench-${version}-Setup-${arch}.${ext}
+portable:
+  artifactName: DeepSeek-Harness-Workbench-${version}-Portable-${arch}.${ext}
