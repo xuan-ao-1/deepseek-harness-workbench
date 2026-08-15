@@ -3,7 +3,7 @@
   "version": "0.1.1",
   "private": true,
   "description": "Desktop distribution of the official DeepSeek Harness architecture. Not a fork, not a new harness, not a new plugin framework.",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "engines": {
     "node": ">=20"
   },
