@@ -39,12 +39,30 @@ jobs:
         run: |
           Write-Host "node=$(node -v) pnpm=$(pnpm -v) DSH_HOME=$env:DSH_HOME"
           $bin = "apps/electron/node_modules/@deepseek-ai/dsh/lib/bin.js"
-          Write-Host "dsh bin exists: $(Test-Path $bin)"
+          $profileDir = "$env:DSH_HOME/profiles/workbench"
           & node $bin plugin --profile workbench add "@deepseek-ai/dsh-web-app@0.1.0-rc.6" 2>&1
           $code = $LASTEXITCODE
           if ($code -ne 0) {
-            Write-Host "::error::bootstrap failed exit=$code (see step log)"
-            exit $code
+            # dsh plugin add generates a pnpm-workspace.yaml whose allowBuilds
+            # holds the placeholder "set this to true or false"; pnpm 11 then
+            # refuses to run native build scripts (koffi) and exits with
+            # ERR_PNPM_IGNORED_BUILDS. Same fix as prepare-runtime.mjs
+            # fixProfileBuildPermissions: swap the placeholder for `true`.
+            $yaml = "$profileDir/pnpm-workspace.yaml"
+            Write-Host "bootstrap attempt 1 failed (exit=$code); patching allowBuilds in $yaml"
+            if (Test-Path $yaml) {
+              $txt = Get-Content $yaml -Raw
+              if ($txt -match 'set this to true or false') {
+                $txt = $txt.Replace('set this to true or false', 'true')
+                Set-Content $yaml -Value $txt -Encoding UTF8
+              }
+            }
+            & node $bin plugin --profile workbench add "@deepseek-ai/dsh-web-app@0.1.0-rc.6" 2>&1
+            $code = $LASTEXITCODE
+            if ($code -ne 0) {
+              Write-Host "::error::bootstrap retry failed exit=$code"
+              exit $code
+            }
           }
       - name: Smoke suite
         shell: pwsh
