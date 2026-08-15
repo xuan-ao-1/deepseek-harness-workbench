@@ -2,6 +2,7 @@
 
 > DeepSeek Harness 官方架构的 Windows 桌面发行版 —— 把官方 `dsh` Agent Harness 打包成开箱即用的桌面应用。
 > 不是新的 Harness、聊天框架、插件框架或 IDE 框架；它只是官方架构的一个**桌面发行状态**（Application Carrier）。
+[![Release](https://img.shields.io/github/v/release/xuan-ao-1/deepseek-harness-workbench?style=flat-square)](https://github.com/xuan-ao-1/deepseek-harness-workbench/releases) [![License](https://img.shields.io/github/license/xuan-ao-1/deepseek-harness-workbench?style=flat-square)](LICENSE) [![Stars](https://img.shields.io/github/stars/xuan-ao-1/deepseek-harness-workbench?style=flat-square)](https://github.com/xuan-ao-1/deepseek-harness-workbench)
 
 ## ✨ 特性
 
@@ -86,7 +87,7 @@ node build/smoke-tests/smoke.mjs  # 冒烟测试（真实启动 Runtime）
 
 ## 📄 License
 
-DeepSeek Harness 本体为 **MIT License**（见官方仓库）。Workbench 发行层 License **待定**（详见 `docs/KNOWN_ISSUES.md` KI-003）。
+本项目基于官方 [deepseek-ai/deepseek-harness](https://github.com/deepseek-ai/deepseek-harness)（MIT）构建，发行层亦采用 **MIT License**。详见 [LICENSE](LICENSE)。
 
 ---
 
