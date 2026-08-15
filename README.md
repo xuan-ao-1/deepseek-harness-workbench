@@ -13,6 +13,20 @@
 - **数据隔离可选**：安装版用户数据在 `~/.dsh`（与命令行 `dsh` 共享）；便携版数据在 exe 旁 `data/.dsh`（绿色携带、零残留）。
 - **架构合规**：不 fork Core、不建第二套插件 API、所有能力通过官方 Profile + Bundle 组合（详见 `docs/`）。
 
+## 🖼 界面预览
+
+<p align="center">
+  <img src="screenshots/main-interface.png" alt="主界面" width="800"/>
+  <br>
+  <em>主界面 —— 无边框沉浸式窗口，自绘 TraeWork 风格标题栏</em>
+</p>
+
+<p align="center">
+  <img src="screenshots/with-sidebar.png" alt="侧边栏展开" width="800"/>
+  <br>
+  <em>侧边栏展开 —— 完整的工作区、插件与会话管理</em>
+</p>
+
 ## 📥 下载
 
 从 **Releases** 页面下载最新版：
