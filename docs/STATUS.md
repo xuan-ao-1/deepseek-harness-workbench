@@ -26,7 +26,7 @@ Updated by: opencode（M1 收尾：无边框窗口完全自绘 + v0.1.1 发布�
 - [x] 打包产物内使用内置 node（`resolveBundledNode` 优先 resourcesPath），不依赖系统 Node
 - [x] **无边框窗口（Frameless）**：`frame: false` + **完全自绘窗口控制条**（`WINDOW_CONTROLS_JS` 注入 32px 全宽拖拽条 + 自绘 3 按钮，对齐 Windows 11 / TraeWork 风格）+ 自适应浅色/深色主题 + `window.workbenchWindow` IPC 控制桥（ADR-011 修订）
 - [x] Bootstrap fallback 页自定义标题栏：32px + 自绘 min/max/close 按钮（hover 红色关闭 `#e81123`）+ maximize/restore 图标切换
-- [x] **右上角让位 + 桌面壳标记**（ADR-012）：自绘标题栏 `right:80px` 让位右上角，`<html>` 注入 `data-dsh-desktop` / `data-dsh-desktop-platform` / CSS 变量 `--dsh-desktop-titlebar-inset:32px`（社区约定），供插件侧 UI 适配
+- [x] **分层壳（ADR-013）**：`WebContentsView` 双视图——32px 壳标题栏（`renderer-shell/`，拖拽区+自绘三按钮+主题 IPC 同步）+ y=32 起的独立 dsh 应用视图；拖拽区与插件 UI 物理隔离，任意插件零冲突；社区标记保留，`--dsh-desktop-titlebar-inset` 语义更新为 `0px`
 
 ## Partial
 
@@ -39,7 +39,7 @@ Updated by: opencode（M1 收尾：无边框窗口完全自绘 + v0.1.1 发布�
 
 ## Current Architecture
 
-Installer → Electron（单实例，**无边框窗口 + 完全自绘控制条**）→ resources/node/node.exe + resources/dsh（hoisted）→ `dsh --profile workbench --port 0`（随机 loopback）→ BrowserWindow 加载官方 Web UI。主进程 `did-finish-load` 后通过 `insertCSS` 注入全局拖拽样式（`body` 可拖拽，交互元素 no-drag）。用户生态：安装版 `~/.dsh`，Portable `<exe>/data/.dsh`。首启缺失 profile 时从 `resources/profile-template/workbench` 离线复制（ADR-010）。
+Installer → Electron（单实例，**无边框窗口 + 完全自绘控制条**）→ resources/node/node.exe + resources/dsh（hoisted）→ `dsh --profile workbench --port 0`（随机 loopback）→ BrowserWindow 加载官方 Web UI。窗口 `contentView` 挂两个 `WebContentsView`：32px 壳标题栏（`renderer-shell/index.html`）+ y=32 起的 dsh 应用视图（`resize`/`maximize` 时 `layoutViews` 同步 bounds，应用主题经 `shell:theme` IPC 回传壳栏）。用户生态：安装版 `~/.dsh`，Portable `<exe>/data/.dsh`。首启缺失 profile 时从 `resources/profile-template/workbench` 离线复制（ADR-010）。
 
 ## Current Profile
 
@@ -47,6 +47,8 @@ Installer → Electron（单实例，**无边框窗口 + 完全自绘控制条**
 - 模板来源：构建期官方 `dsh plugin --profile workbench add @deepseek-ai/dsh-web-app@0.1.0-rc.6` 于沙盒 DSH_HOME 生成（prepare-runtime.mjs，含 KI-005 allowBuilds 修补重试）
 
 ## Recent Changes
+
+- 2026-08-15：**分层壳（ADR-013）**：`WebContentsView` 双视图（32px 壳标题栏 + y=32 应用视图），根治注入式拖拽条与插件 UI 冲突（KI-011）；`--dsh-desktop-titlebar-inset` 更新为 0px；`tsc --noEmit` PASS；文档同步（DECISIONS/ADR-013、KNOWN_ISSUES/KI-011、STATUS）
 
 - 2026-08-15：**右上角让位 + 桌面壳标记**（ADR-012）：自绘标题栏 ight:80px 让位，注入 data-dsh-desktop 系列标记 + --dsh-desktop-titlebar-inset（社区约定，对齐 anywhere-labs Desktop）；	sc --noEmit PASS；文档同步（DECISIONS/ADR-012、KNOWN_ISSUES/KI-010、STATUS）
 - 2026-08-15：**右上角让位 + 桌面壳标记**（ADR-012）：自绘标题栏 `right:80px` 让位，注入 `data-dsh-desktop` 系列标记 + `--dsh-desktop-titlebar-inset`（社区约定，对齐 anywhere-labs Desktop）；`tsc --noEmit` PASS；文档同步（DECISIONS/ADR-012、KNOWN_ISSUES/KI-010、STATUS）

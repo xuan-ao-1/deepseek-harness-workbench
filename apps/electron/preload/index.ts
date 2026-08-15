@@ -1,4 +1,4 @@
-﻿import { ipcRenderer, contextBridge } from "electron";
+import { ipcRenderer, contextBridge } from "electron";
 
 contextBridge.exposeInMainWorld("workbenchWindow", {
   minimize: () => ipcRenderer.send("window:minimize"),
@@ -9,7 +9,8 @@ contextBridge.exposeInMainWorld("workbenchWindow", {
     const listener = (_event: unknown, maximized: boolean) => callback(maximized);
     ipcRenderer.on("window:maximized-changed", listener);
     return () => ipcRenderer.removeListener("window:maximized-changed", listener);
-  }
+  },
+  notifyTheme: (background: string) => ipcRenderer.send("shell:theme", background)
 });
 
 export {};

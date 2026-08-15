@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'unsafe-inline'; script-src 'unsafe-inline'">
+  <title>DeepSeek Harness Workbench</title>
+  <style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      height: 32px;
+      overflow: hidden;
+      background: #ffffff;
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      -webkit-app-region: drag;
+      user-select: none;
+    }
+    #bar {
+      display: flex;
+      height: 32px;
+      align-items: stretch;
+      justify-content: flex-end;
+    }
+    #bar button {
+      width: 46px;
+      height: 100%;
+      border: none;
+      background: transparent;
+      color: #333333;
+      cursor: default;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.08s ease, color 0.08s ease;
+      -webkit-app-region: no-drag;
+      outline: none;
+      padding: 0;
+      margin: 0;
+      border-radius: 0;
+    }
+    #bar button:hover { background: rgba(0, 0, 0, 0.06); color: #000000; }
+    #bar button:active { background: rgba(0, 0, 0, 0.1); color: #000000; }
+    #bar button.close:hover { background: #e81123; color: #ffffff; }
+    #bar button.close:active { background: #c42b1c; color: #ffffff; }
+    #bar svg {
+      width: 11px;
+      height: 11px;
+      display: block;
+      pointer-events: none;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    /* dark-theme adaptation driven by __setBarTheme() */
+    body.dark #bar button { color: #cccccc; }
+    body.dark #bar button:hover { background: rgba(255, 255, 255, 0.08); color: #ffffff; }
+    body.dark #bar button:active { background: rgba(255, 255, 255, 0.12); color: #ffffff; }
+  </style>
+</head>
+<body>
+  <div id="bar">
+    <button id="wb-min" title="最小化" aria-label="最小化">
+      <svg viewBox="0 0 12 12"><line x1="2.5" y1="6" x2="9.5" y2="6"/></svg>
+    </button>
+    <button id="wb-max" title="最大化" aria-label="最大化">
+      <svg viewBox="0 0 12 12"><rect x="2.5" y2="2.5" width="7" height="7" rx="0.8"/></svg>
+    </button>
+    <button id="wb-close" class="close" title="关闭" aria-label="关闭">
+      <svg viewBox="0 0 12 12"><line x1="3.2" y1="3.2" x2="8.8" y2="8.8"/><line x1="8.8" y1="3.2" x2="3.2" y2="8.8"/></svg>
+    </button>
+  </div>
+  <script>
+    (function () {
+      var api = window.workbenchWindow;
+      var btnMin = document.getElementById("wb-min");
+      var btnMax = document.getElementById("wb-max");
+      var btnClose = document.getElementById("wb-close");
+
+      function updateMaxIcon(isMaximized) {
+        btnMax.innerHTML = isMaximized
+          ? '<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="6.5" height="6.5" rx="0.8"/><path d="M8 3.7V2.5H2.5V8H3.7"/></svg>'
+          : '<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y1="2.5" width="7" height="7" rx="0.8"/></svg>';
+        btnMax.title = isMaximized ? "还原" : "最大化";
+      }
+
+      btnMin.addEventListener("click", function (e) { e.stopPropagation(); api && api.minimize(); });
+      btnMax.addEventListener("click", function (e) { e.stopPropagation(); api && api.maximizeToggle(); });
+      btnClose.addEventListener("click", function (e) { e.stopPropagation(); api && api.close(); });
+
+      if (api && api.isMaximized) api.isMaximized().then(updateMaxIcon);
+      if (api && api.onMaximizedChange) api.onMaximizedChange(updateMaxIcon);
+
+      /* Theme relay from the app view (via main process IPC). */
+      window.__setBarTheme = function (bg) {
+        if (!bg) return;
+        document.body.style.background = bg;
+        var m = bg.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+        if (!m) return;
+        var bright = (+m[1] * 299 + +m[2] * 587 + +m[3] * 114) / 1000;
+        document.body.classList.toggle("dark", bright < 128);
+      };
+    })();
+  </script>
+</body>
+</html>

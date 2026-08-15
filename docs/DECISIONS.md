@@ -199,3 +199,21 @@
 **后果**：ADR-011 修订所描述的"全宽 `left:0; right:0`"标题栏改为 `right:80px`；窗口控制按钮右缘距窗口右缘 80px；`data-dsh-desktop` 系列标记成为桌面壳与插件之间的稳定契约。
 
 **官方架构对应**：窗口样式属于桌面发行层责任（Electron Application Carrier），不涉及 DSH/Cordis Plugin 层；标记约定与社区 desktop host 保持一致。
+
+---
+
+## ADR-013：分层壳（WebContentsView 双视图）——标题栏与插件 UI 物理隔离
+
+- 日期：2026-08-15
+- 状态：Accepted（取代 ADR-012 的让位/收窄思路）
+
+**决定**：无边框窗口不再把拖拽条注入到 dsh 网页之上，改为 `contentView` 挂两个兄弟 `WebContentsView`：顶部 32px 壳标题栏（独立本地页面 `renderer-shell/index.html`，含拖拽区 + 自绘三按钮 + 主题自适应），dsh 网页应用独占 y=32 以下的全部区域。
+
+**原因**：注入式拖拽条与插件固定定位 UI 存在结构性冲突——拖拽区覆盖的像素必然拦截插件点击（explorer "+"等多级弹出菜单、better-sidebar 折叠钮均被挡）。ADR-012 的 `right:80px` 让位与后续收窄/透明/细边方案都只能在"可拖区域"与"插件可点区域"之间做零和权衡，无法根治。分层后两者物理隔离，对任意插件（含多层弹出菜单）零冲突。
+
+**后果**：
+1. 应用内容物理上从 y=32 开始，插件 `position:fixed; top:0` 位于应用视图像，永远可见可点。
+2. 壳栏与应用主题同步：应用视图注入脚本读 `computedStyle` 背景 → IPC `shell:theme` → 壳栏 `__setBarTheme()` 适配明暗（TraeWork 风格按钮样式不变）。
+3. 社区标记保留但语义更新：`data-dsh-desktop="true"` / `data-dsh-desktop-platform="win32"` 照旧；`--dsh-desktop-titlebar-inset` 从 32px 改为 **0px**（分层后标题栏不再覆盖网页视口）。
+4. `resize`/`maximize`/`unmaximize` 时 `layoutViews()` 同步两视图 bounds；fallback 页（renderer-bootstrap）去掉自绘标题栏避免重复。
+5. ADR-011 的自绘按钮视觉规范（46px/11px 线条/hover/红色关闭）原样保留，仅宿主从"注入覆盖层"变为"独立壳视图"。

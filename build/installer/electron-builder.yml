@@ -5,6 +5,7 @@ directories:
 files:
   - dist/**/*
   - renderer-bootstrap/**/*
+  - renderer-shell/**/*
   - package.json
   - "!node_modules/**"
 asar: true

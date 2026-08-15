@@ -16,92 +16,14 @@
       overflow: hidden;
     }
 
-    body {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .titlebar {
-      height: 32px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 0 0 12px;
-      background: #ffffff;
-      border-bottom: 1px solid #e5e5e5;
-      flex-shrink: 0;
-      -webkit-app-region: drag;
-      user-select: none;
-    }
-
-    .titlebar-title {
-      font-size: 12px;
-      font-weight: 400;
-      color: #333333;
-    }
-
-    .window-controls {
-      display: flex;
-      height: 100%;
-      -webkit-app-region: no-drag;
-    }
-
-    .window-controls button {
-      width: 46px;
-      height: 100%;
-      border: none;
-      background: transparent;
-      color: #333333;
-      cursor: default;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.08s ease, color 0.08s ease;
-      -webkit-app-region: no-drag;
-      outline: none;
-      padding: 0;
-      margin: 0;
-      border-radius: 0;
-    }
-
-    .window-controls button:hover {
-      background: rgba(0, 0, 0, 0.06);
-      color: #000000;
-    }
-
-    .window-controls button:active {
-      background: rgba(0, 0, 0, 0.1);
-      color: #000000;
-    }
-
-    .window-controls button.close:hover {
-      background: #e81123;
-      color: #ffffff;
-    }
-
-    .window-controls button.close:active {
-      background: #c42b1c;
-      color: #ffffff;
-    }
-
-    .window-controls svg {
-      width: 11px;
-      height: 11px;
-      display: block;
-      fill: none;
-      stroke: currentColor;
-      stroke-width: 1.2;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
-
+    /* The window title bar is a separate shell view above this one; this
+       page only renders the fallback content. */
     .content {
-      flex: 1;
+      height: 100%;
       display: grid;
       place-items: center;
       padding: 24px;
       overflow: auto;
-      -webkit-app-region: no-drag;
       background: #ffffff;
     }
 
@@ -119,20 +41,6 @@
   </style>
 </head>
 <body>
-  <div class="titlebar">
-    <div class="titlebar-title">DeepSeek Harness Workbench</div>
-    <div class="window-controls">
-      <button id="btn-minimize" title="最小化" aria-label="最小化">
-        <svg viewBox="0 0 12 12"><line x1="2.5" y1="6" x2="9.5" y2="6"/></svg>
-      </button>
-      <button id="btn-maximize" title="最大化" aria-label="最大化">
-        <svg viewBox="0 0 12 12"><rect x="2.5" y="2.5" width="7" height="7" rx="0.8"/></svg>
-      </button>
-      <button id="btn-close" class="close" title="关闭" aria-label="关闭">
-        <svg viewBox="0 0 12 12"><line x1="3.2" y1="3.2" x2="8.8" y2="8.8"/><line x1="8.8" y1="3.2" x2="3.2" y2="8.8"/></svg>
-      </button>
-    </div>
-  </div>
   <div class="content">
     <div class="box">
       <h1>DeepSeek Harness Workbench</h1>
@@ -141,27 +49,5 @@
       <p>当前项目状态见仓库内 <code>docs/STATUS.md</code>。</p>
     </div>
   </div>
-  <script>
-    (function() {
-      var api = window.workbenchWindow;
-      var btnMin = document.getElementById("btn-minimize");
-      var btnMax = document.getElementById("btn-maximize");
-      var btnClose = document.getElementById("btn-close");
-
-      function updateMaxIcon(isMaximized) {
-        btnMax.innerHTML = isMaximized
-          ? '<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="6.5" height="6.5" rx="0.8"/><path d="M8 3.7V2.5H2.5V8H3.7"/></svg>'
-          : '<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="2.5" width="7" height="7" rx="0.8"/></svg>';
-        btnMax.title = isMaximized ? "还原" : "最大化";
-      }
-
-      btnMin.addEventListener("click", function() { api.minimize(); });
-      btnMax.addEventListener("click", function() { api.maximizeToggle(); });
-      btnClose.addEventListener("click", function() { api.close(); });
-
-      api.isMaximized().then(updateMaxIcon);
-      api.onMaximizedChange(updateMaxIcon);
-    })();
-  </script>
 </body>
 </html>

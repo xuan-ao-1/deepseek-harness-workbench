@@ -55,3 +55,10 @@
 - 修复：ADR-012 将标题栏改为 `right:80px` 让位，并注入社区标记 `data-dsh-desktop="true"` / `data-dsh-desktop-platform` / CSS 变量 `--dsh-desktop-titlebar-inset:32px`，与 anywhere-labs Desktop 约定一致。
 - 验证：已打包进 release/ app.asar 并确认 `right:80px` + `data-dsh-desktop` 在内；TS 编译通过。
 - 待观察：插件侧 PR #82/#49 合并发布后，升级 dsh-better-sidebar 即可自动适配，无需再改壳；需回归验证折叠按钮可点、窗口按钮仍可拖拽。
+
+## KI-011 注入式拖拽条与插件 UI 结构性冲突 [CLOSED 2026-08-15]
+
+- 问题：ADR-011/012 的注入式标题栏（覆盖在 dsh 网页上的拖拽层）与插件固定定位 UI 存在零和冲突：全宽挡插件（KI-010）、收窄后顶部不可拖、透明+no-drag 白名单漏掉非标准元素（explorer "+"按钮点不了）。任何"网页上叠拖拽区"的方案都无法同时满足可拖与全插件可点。
+- 尝试与不足：`right:80px` 让位（ADR-012，只解 better-sidebar）→ 收窄 200px（顶部左侧不可拖）→ 全宽透明 + 交互元素 no-drag（漏非 button/a 元素）→ 8px 细拖拽边（explorer "+"在细边内仍被拦）。
+- 修复（ADR-013）：分层壳——`WebContentsView` 双视图（32px 壳标题栏 + y=32 起的独立应用视图），拖拽区与插件 UI 物理隔离，任意插件（含多级弹出菜单）零冲突。
+- 验证：`tsc --noEmit` PASS；桌面版安装后人工验证插件可点/窗口可拖/主题自适应。
