@@ -48,3 +48,10 @@
 - `@mistralai/mistralai`（dsh 传递依赖）文件路径超 MAX_PATH；PowerShell `Remove-Item` 与 `cmd rd` 均失败
 - 可靠清理：`robocopy <空目录> <目标> /MIR` 后 `rd`
 - pnpm 抓取器在大并发下对该包组出现 `UND_ERR_DESTROYED`（staging .npmrc 已限 `network-concurrency=4` + `fetch-retries=5`）
+
+## KI-010 插件侧 UI 与自绘标题栏重叠 [CLOSED 2026-08-15]
+
+- 问题：完全自绘标题栏（ADR-011 修订）为全宽 `left:0; right:0`，把右侧 80px 也划为窗口控制区，导致插件侧右上角固定定位 UI（如 dsh-better-sidebar 的折叠/展开按钮，`right:10px`、宽 60px）被遮挡、无法点击。
+- 修复：ADR-012 将标题栏改为 `right:80px` 让位，并注入社区标记 `data-dsh-desktop="true"` / `data-dsh-desktop-platform` / CSS 变量 `--dsh-desktop-titlebar-inset:32px`，与 anywhere-labs Desktop 约定一致。
+- 验证：已打包进 release/ app.asar 并确认 `right:80px` + `data-dsh-desktop` 在内；TS 编译通过。
+- 待观察：插件侧 PR #82/#49 合并发布后，升级 dsh-better-sidebar 即可自动适配，无需再改壳；需回归验证折叠按钮可点、窗口按钮仍可拖拽。

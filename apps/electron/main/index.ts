@@ -22,7 +22,7 @@ const WINDOW_CONTROLS_JS = String.raw`(function () {
     '<button id="wb-close" class="wb-close" title="关闭" aria-label="关闭"><svg' + B + '><line x1="3.2" y1="3.2" x2="8.8" y2="8.8"/><line x1="8.8" y1="3.2" x2="3.2" y2="8.8"/></svg></button>';
   var css = document.createElement("style");
   css.textContent =
-    "#wb-window-controls{position:fixed!important;top:0!important;left:0!important;right:0!important;height:32px!important;display:flex!important;align-items:stretch!important;justify-content:flex-end!important;z-index:2147483647!important;-webkit-app-region:drag!important;user-select:none!important}" +
+    "#wb-window-controls{position:fixed!important;top:0!important;left:0!important;right:80px!important;height:32px!important;display:flex!important;align-items:stretch!important;justify-content:flex-end!important;z-index:2147483647!important;-webkit-app-region:drag!important;user-select:none!important}" +
     "#wb-window-controls button{width:46px!important;height:100%!important;border:none!important;background:transparent!important;color:#333!important;display:flex!important;align-items:center!important;justify-content:center!important;-webkit-app-region:no-drag!important;cursor:default!important;transition:background .08s ease,color .08s ease!important;outline:none!important;padding:0!important;margin:0!important;border-radius:0!important;box-shadow:none!important;position:relative!important;overflow:hidden!important}" +
     "#wb-window-controls button:hover{background:rgba(0,0,0,0.06)!important;color:#000!important}" +
     "#wb-window-controls button:active{background:rgba(0,0,0,0.1)!important;color:#000!important}" +
@@ -31,6 +31,14 @@ const WINDOW_CONTROLS_JS = String.raw`(function () {
     "#wb-window-controls svg{width:11px!important;height:11px!important;display:block!important;pointer-events:none!important}";
   document.documentElement.appendChild(css);
   (document.body || document.documentElement).appendChild(bar);
+  /* Desktop-shell community markers (anywhere-labs Desktop convention):
+     signal the harness that this is the desktop shell and where the
+     injected title bar sits, so plugin-side UI can adapt (e.g. a sidebar
+     collapse button that must not be covered by the window controls). */
+  var dh = document.documentElement;
+  dh.setAttribute("data-dsh-desktop", "true");
+  dh.setAttribute("data-dsh-desktop-platform", "win32");
+  dh.style.setProperty("--dsh-desktop-titlebar-inset", "32px");
   /* Match title bar background to page background */
   function syncBg() {
     try {

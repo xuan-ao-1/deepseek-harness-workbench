@@ -187,3 +187,15 @@
 
 **影响**：放弃 Windows 原生 Snap Assist / Aero Snap 的标题栏右键菜单（可通过按钮 hover 还原），换取与 TraeWork 一致的沉浸式自绘审美；Bootstrap fallback 页同步改为 32px 高度 + 相同按钮样式。
 
+### ADR-012（2026-08-15）：右上角让位 + 桌面壳标记（社区约定）
+
+**变更**：为兼容插件侧折叠/展开按钮（dsh-better-sidebar），对完全自绘标题栏做两处调整：
+
+1. **右上角让位**：注入的 32px 自绘标题栏从 `right: 0` 改为 `right: 80px`。右上角 80px 留给网页固定定位内容——dsh-better-sidebar 的折叠/展开按钮（`right: 10px`、宽 60px）正好露出来，可点可收；窗口控制按钮仍在右上角（相对左移 80px），其余部分照常拖拽窗口。
+2. **桌面壳标记**：注入脚本在 `<html>` 上设置 `data-dsh-desktop="true"`、`data-dsh-desktop-platform="win32"`，并设置 CSS 变量 `--dsh-desktop-titlebar-inset: 32px`。与 anywhere-labs Desktop 同一套约定，插件侧升级后即可自动适配，无需再改壳。
+
+**原因**：插件侧 UI（如侧边栏折叠按钮）此前会被右侧窗口控制按钮遮挡，无法点击；通过让位 + 社区标记，把"壳层布局约定"显式暴露给插件，避免壳层与插件各自硬编码、互相冲突。
+
+**后果**：ADR-011 修订所描述的"全宽 `left:0; right:0`"标题栏改为 `right:80px`；窗口控制按钮右缘距窗口右缘 80px；`data-dsh-desktop` 系列标记成为桌面壳与插件之间的稳定契约。
+
+**官方架构对应**：窗口样式属于桌面发行层责任（Electron Application Carrier），不涉及 DSH/Cordis Plugin 层；标记约定与社区 desktop host 保持一致。

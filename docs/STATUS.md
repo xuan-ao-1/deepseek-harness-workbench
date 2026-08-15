@@ -1,4 +1,4 @@
-﻿# Project Status
+# Project Status
 
 Last updated: 2026-08-15
 Updated by: opencode（M1 收尾：无边框窗口完全自绘 + v0.1.1 发布到 GitHub）
@@ -26,6 +26,7 @@ Updated by: opencode（M1 收尾：无边框窗口完全自绘 + v0.1.1 发布�
 - [x] 打包产物内使用内置 node（`resolveBundledNode` 优先 resourcesPath），不依赖系统 Node
 - [x] **无边框窗口（Frameless）**：`frame: false` + **完全自绘窗口控制条**（`WINDOW_CONTROLS_JS` 注入 32px 全宽拖拽条 + 自绘 3 按钮，对齐 Windows 11 / TraeWork 风格）+ 自适应浅色/深色主题 + `window.workbenchWindow` IPC 控制桥（ADR-011 修订）
 - [x] Bootstrap fallback 页自定义标题栏：32px + 自绘 min/max/close 按钮（hover 红色关闭 `#e81123`）+ maximize/restore 图标切换
+- [x] **右上角让位 + 桌面壳标记**（ADR-012）：自绘标题栏 `right:80px` 让位右上角，`<html>` 注入 `data-dsh-desktop` / `data-dsh-desktop-platform` / CSS 变量 `--dsh-desktop-titlebar-inset:32px`（社区约定），供插件侧 UI 适配
 
 ## Partial
 
@@ -47,6 +48,8 @@ Installer → Electron（单实例，**无边框窗口 + 完全自绘控制条**
 
 ## Recent Changes
 
+- 2026-08-15：**右上角让位 + 桌面壳标记**（ADR-012）：自绘标题栏 ight:80px 让位，注入 data-dsh-desktop 系列标记 + --dsh-desktop-titlebar-inset（社区约定，对齐 anywhere-labs Desktop）；	sc --noEmit PASS；文档同步（DECISIONS/ADR-012、KNOWN_ISSUES/KI-010、STATUS）
+- 2026-08-15：**右上角让位 + 桌面壳标记**（ADR-012）：自绘标题栏 `right:80px` 让位，注入 `data-dsh-desktop` 系列标记 + `--dsh-desktop-titlebar-inset`（社区约定，对齐 anywhere-labs Desktop）；`tsc --noEmit` PASS；文档同步（DECISIONS/ADR-012、KNOWN_ISSUES/KI-010、STATUS）
 - 2026-08-14 (7)：**无边框窗口方案落地**（ADR-011）：`frame: false` + Windows `titleBarOverlay` + insertCSS 全局 app-region drag 注入 + preload 暴露 `window.workbenchWindow` IPC 桥 + bootstrap 页自绘标题栏（40px + min/max/close 按钮 + maximize 图标切换）；tsc --noEmit PASS
 - 2026-08-14 (3)：M1 Phase 0 全链路打通 + 打包 + Portable 冒烟 PASS
 - 2026-08-14 (4)：首启离线 profile bootstrap（ADR-010）+ Portable DSH_HOME 隔离（ADR-003 落地）+ 冒烟双场景 PASS + 进程清理加固（同步 taskkill + 按映像名预清理 + 600s 超时）
@@ -127,4 +130,5 @@ M2 侦察已完成第一步（2026-08-14 查 npm）：`@deepseek-ai/dsh-host-api
 | Setup 安装后启动冒烟 | **2026-08-14 PASS**（干净 DSH_HOME → 离线 bootstrap → web boot → marker PASS） |
 | Setup 静默卸载 | **2026-08-14 PASS**（`Uninstall /S _?=<dir>`，无开始菜单/桌面残留；NSIS 自删外壳需补 rd，属正常行为） |
 | Clean-machine test | PARTIAL（Portable 离线 + Setup 静默路径均已覆盖；真 VM 待做） |
-| Frameless window 视觉验收 | **NOT VERIFIED**（需真实 Windows 桌面人眼验证拖拽/overlay/Snap） |
+| Frameless window 视觉验收 | **NOT VERIFIED**（需真实 Windows 桌面人眼验证拖拽/overlay/Snap）
+| 右上角让位 + data-dsh-desktop 标记（ADR-012） | **NOT VERIFIED**（已打包进 app.asar 确认 right:80px + data-dsh-desktop 在内；TS 编译 PASS；视觉验证待插件侧适配后回归） |
