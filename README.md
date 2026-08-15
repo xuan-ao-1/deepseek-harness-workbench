@@ -48,6 +48,23 @@
 > 首次启动 Portable 版需要解压（约 3-4 分钟），请耐心等待。
 > 校验文件完整性请使用随 Release 附带的 `SHA256SUMS.txt`。
 
+### ⚡ 一键安装（PowerShell）
+
+不用下载页面，复制下面任意一行到 PowerShell 回车即可：
+
+```powershell
+# 安装 Setup 版（静默安装，自动建快捷方式）
+irm https://raw.githubusercontent.com/xuan-ao-1/deepseek-harness-workbench/main/scripts/install.ps1 | iex
+
+# 部署 Portable 版（放到 %USERPROFILE%\DeepSeek Harness Workbench）
+irm https://raw.githubusercontent.com/xuan-ao-1/deepseek-harness-workbench/main/scripts/install.ps1 | iex -Args "-Portable"
+
+# 自定义便携版目录
+irm https://raw.githubusercontent.com/xuan-ao-1/deepseek-harness-workbench/main/scripts/install.ps1 | iex -Args "-Portable -InstallDir D:\Apps\DeepSeek Harness"
+```
+
+脚本自动完成：查询最新 Release → 下载安装包 → **SHA256 完整性校验** → 静默安装/就位 → 启动应用。
+
 ## 🚀 快速开始
 
 1. 下载 **Setup** 或 **Portable** 版本并运行。
