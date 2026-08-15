@@ -1,0 +1,45 @@
+﻿name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  arch-check:
+    name: Architecture check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Architecture guard
+        run: node build/scripts/check-architecture.mjs
+
+  build-and-smoke:
+    name: Build + smoke (Windows)
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Build Electron main (tsc)
+        run: pnpm -C apps/electron run build
+      - name: Bootstrap workbench profile
+        shell: pwsh
+        env:
+          DSH_HOME: ${{ runner.temp }}/dsh-ci-home
+        run: |
+          node apps/electron/node_modules/@deepseek-ai/dsh/lib/bin.js plugin --profile workbench add "@deepseek-ai/dsh-web-app@0.1.0-rc.6"
+      - name: Smoke suite
+        shell: pwsh
+        env:
+          DSH_HOME: ${{ runner.temp }}/dsh-ci-home
+        run: node build/smoke-tests/smoke.mjs

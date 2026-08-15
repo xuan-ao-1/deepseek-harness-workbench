@@ -16,3 +16,6 @@ release-v011/
 release-build/
 *.blockmap
 asar-check/
+
+release-new/
+

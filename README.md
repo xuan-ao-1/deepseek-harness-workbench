@@ -2,7 +2,7 @@
 
 > DeepSeek Harness 官方架构的 Windows 桌面发行版 —— 把官方 `dsh` Agent Harness 打包成开箱即用的桌面应用。
 > 不是新的 Harness、聊天框架、插件框架或 IDE 框架；它只是官方架构的一个**桌面发行状态**（Application Carrier）。
-[![Release](https://img.shields.io/github/v/release/xuan-ao-1/deepseek-harness-workbench?style=flat-square)](https://github.com/xuan-ao-1/deepseek-harness-workbench/releases) [![License](https://img.shields.io/github/license/xuan-ao-1/deepseek-harness-workbench?style=flat-square)](LICENSE) [![Stars](https://img.shields.io/github/stars/xuan-ao-1/deepseek-harness-workbench?style=flat-square)](https://github.com/xuan-ao-1/deepseek-harness-workbench)
+[![Release](https://img.shields.io/github/v/release/xuan-ao-1/deepseek-harness-workbench?style=flat-square)](https://github.com/xuan-ao-1/deepseek-harness-workbench/releases) [![License](https://img.shields.io/github/license/xuan-ao-1/deepseek-harness-workbench?style=flat-square)](LICENSE) [![Stars](https://img.shields.io/github/stars/xuan-ao-1/deepseek-harness-workbench?style=flat-square)](https://github.com/xuan-ao-1/deepseek-harness-workbench) [![CI](https://github.com/xuan-ao-1/deepseek-harness-workbench/actions/workflows/ci.yml/badge.svg)](https://github.com/xuan-ao-1/deepseek-harness-workbench/actions)
 
 ## ✨ 特性
 
@@ -22,6 +22,19 @@
 <p align="center">
   <img src="screenshots/with-sidebar.png" alt="DeepSeek Harness Workbench 界面" width="800"/>
 </p>
+
+## ⚖️ 与官方 dsh CLI 的对比
+
+| | 官方 `dsh` CLI | **DeepSeek Harness Workbench** |
+|---|---|---|
+| 安装 | 需手动装 Node.js / pnpm / DSH | 单个 exe 装完即用，内置全部运行时 |
+| 界面 | 终端命令 + 手动开浏览器 | 独立无边框窗口，原生 Web UI，自动启动 |
+| 窗口控制 | 无（浏览器标签页） | 自绘标题栏 + 最小化/最大化/关闭（Win11/TraeWork 风格） |
+| 插件生态 | 官方 `dsh plugin` | **完全兼容**，同一套 Profile + Bundle，不改版 |
+| 数据 | `~/.dsh` | 安装版共用 `~/.dsh`；便携版隔离到 exe 旁 |
+| 上手成本 | 高（多条命令） | 低（双击运行，配一个 API Key 即可对话） |
+
+> 它不是对 DSH 的分叉或替代，而是官方架构的**桌面发行状态** —— 省掉环境配置，换来原生窗口体验，底层能力完全一致。
 
 ## 📥 下载
 
