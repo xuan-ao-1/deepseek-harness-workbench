@@ -16,15 +16,11 @@
 ## 🖼 界面预览
 
 <p align="center">
-  <img src="screenshots/main-interface.png" alt="主界面" width="800"/>
-  <br>
-  <em>主界面 —— 无边框沉浸式窗口，自绘 TraeWork 风格标题栏</em>
+  <img src="screenshots/main-interface.png" alt="DeepSeek Harness Workbench 界面" width="800"/>
 </p>
 
 <p align="center">
-  <img src="screenshots/with-sidebar.png" alt="侧边栏展开" width="800"/>
-  <br>
-  <em>侧边栏展开 —— 完整的工作区、插件与会话管理</em>
+  <img src="screenshots/with-sidebar.png" alt="DeepSeek Harness Workbench 界面" width="800"/>
 </p>
 
 ## 📥 下载
